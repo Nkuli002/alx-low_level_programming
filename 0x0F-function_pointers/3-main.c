@@ -1,44 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "3-calc.h"
+#include "function_pointers.h"
 
 /**
- * main - Start here to do stuff
- * @argc: Number of arguments passed in
- * @argv: Arguments stored in each index
- * Return: Success
+ * main - searchs for an integer
+ *@argc: number of arguments
+ *@argv: array with arguments
+ *
+ * Return: no return
  */
 int main(int argc, char *argv[])
 {
-	int result, num1, num2;
-	int (*ptr)(int, int);
+	int num1;
+	int num2;
+	int result;
 
-	if (argc < 4 || argv[1] == NULL || argv[3] == NULL)
+	num1 = 0;
+	num2 = 0;
+	if (argc != 4)
 	{
 		printf("Error\n");
 		exit(98);
 	}
-
-	if ((*argv[2] == '/' || *argv[2] == '%') && *argv[3] == '0')
-	{
-		printf("Error\n");
-		exit(100);
-	}
-
-	num1 = atoi(argv[1]);
-	num2 = atoi(argv[3]);
-
-	ptr = get_op_func(argv[2]);
-
-	if (ptr == NULL || argv[2][1] != '\0')
+	if (argv[2][0] != '+' && argv[2][0] != '-' && argv[2][0] != '*'
+	    && argv[2][0] != '/' && argv[2][0] != '%')
 	{
 		printf("Error\n");
 		exit(99);
 	}
+	if (argv[2][1] == '\0')
+	{
+		num1 = atoi(argv[1]);
+		num2 = atoi(argv[3]);
+		result = (*get_op_func(argv[2]))(num1, num2);
+		printf("%d\n", result);
 
-	result = ptr(num1, num2);
+	} else
+	{
 
-	printf("%d\n", result);
-
+		printf("Error\n");
+		exit(99);
+	}
 	return (0);
 }
